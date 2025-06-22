@@ -1,0 +1,334 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      UserRole @default(USER)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  documents     Document[]
+  processamentos Processamento[]
+  sessions      Session[]
+  logs          Log[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Empresa {
+  id               String   @id @default(cuid())
+  cnpj             String   @unique
+  razaoSocial      String
+  nomeFantasia     String?
+  ie               String?
+  im               String?
+  cnae             String?
+  endereco         String?
+  regimeTributario String?
+  dataCadastro     DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  documentos       Document[]
+  
+  // Relations para SPED e XML
+  spedContribuicoesItems SpedContribuicoesItem[]
+  spedContribuicoesApuracao SpedContribuicoesApuracao[]
+  spedFiscalItems SpedFiscalItem[]
+  spedFiscalApuracao SpedFiscalApuracao[]
+  xmlDocuments XMLDocument[]
+  
+  // Futuro: faturamentos, apuracoes, etc
+
+  @@map("empresas")
+}
+
+model Document {
+  id        String   @id @default(cuid())
+  userId    String
+  filename  String
+  originalName String
+  path      String
+  size      Int
+  mimeType  String
+  status    DocumentStatus
+  metadata  Json?
+  empresaId String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user     User   @relation(fields: [userId], references: [id])
+  empresa  Empresa? @relation(fields: [empresaId], references: [id])
+  processamentos Processamento[]
+  aiResults AIProcessingResult[]
+  xmlDocuments XMLDocument[]
+  spedContribuicoesItems SpedContribuicoesItem[]
+  spedContribuicoesApuracoes SpedContribuicoesApuracao[]
+  spedFiscalItems SpedFiscalItem[]
+  spedFiscalApuracoes SpedFiscalApuracao[]
+
+  @@map("documents")
+}
+
+model AIProcessingResult {
+  id            String   @id @default(cuid())
+  documentId    String
+  model         String  // e.g., 'XML_PARSER', 'AI_VALIDATOR', etc.
+  tokens        Int?
+  processingTime Int?
+  result        Json?
+  error         String?
+  createdAt     DateTime @default(now())
+
+  // Relations
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@map("ai_processing_results")
+}
+
+model Log {
+  id        String   @id @default(cuid())
+  level     LogLevel
+  message   String
+  metadata  Json?
+  userId    String?
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("logs")
+}
+
+model CacheEntry {
+  key       String   @id
+  value     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("cache_entries")
+}
+
+model SpedContribuicoesItem {
+  id            String   @id @default(cuid())
+  documentId    String
+  empresaId     String
+  documento     String
+  data          String
+  cnpj          String
+  produto       String
+  cfop          String
+  cst           String
+  valor         Float
+  basePis       Float
+  valorPis      Float
+  baseCofins    Float
+  valorCofins   Float
+  createdAt     DateTime @default(now())
+
+  // Relations
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  empresa  Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@map("sped_contribuicoes_items")
+}
+
+model SpedContribuicoesApuracao {
+  id        String   @id @default(cuid())
+  documentId String
+  empresaId String
+  tipo      String   // PIS ou COFINS
+  periodo   String
+  base      Float?
+  aliquota  Float?
+  valor     Float
+  createdAt DateTime @default(now())
+
+  // Relations
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  empresa  Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@map("sped_contribuicoes_apuracoes")
+}
+
+model SpedFiscalItem {
+  id         String   @id @default(cuid())
+  documentId String
+  empresaId  String
+  documento  String
+  data       String
+  cnpj       String
+  produto    String
+  cfop       String
+  cst        String
+  ncm        String
+  valor      Float
+  baseIcms   Float
+  valorIcms  Float
+  baseIpi    Float
+  valorIpi   Float
+  createdAt  DateTime @default(now())
+
+  // Relations
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  empresa  Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@map("sped_fiscal_items")
+}
+
+model SpedFiscalApuracao {
+  id            String   @id @default(cuid())
+  documentId    String
+  empresaId     String
+  cst           String
+  cfop          String
+  aliquota      Float
+  valorOperacao Float
+  baseIcms      Float
+  valorIcms     Float
+  baseIcmsSt    Float
+  valorIcmsSt   Float
+  valorRedBc    Float
+  valorIpi      Float
+  createdAt     DateTime @default(now())
+
+  // Relations
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  empresa  Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@map("sped_fiscal_apuracoes")
+}
+
+model XMLDocument {
+  id                 String   @id @default(cuid())
+  documentId         String
+  empresaId          String
+  tipoDocumento      String   // NFe, CTe, NFSe, MDFe
+  numeroDocumento    String
+  serie              String
+  dataEmissao        DateTime
+  valorTotal         Float
+  cnpjEmitente       String
+  cnpjDestinatario   String?
+  cpfDestinatario    String?
+  chaveAcesso        String?
+  protocolo          String?
+  status             String   // autorizada, cancelada, denegada
+  observacoes        String?
+  // Impostos
+  valorTotalIcms     Float
+  valorTotalIpi      Float?
+  valorTotalPis      Float
+  valorTotalCofins   Float
+  valorTotalIss      Float?
+  baseCalculoIcms    Float
+  baseCalculoPis     Float
+  baseCalculoCofins  Float
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relations
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  empresa  Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  itens    XMLItem[]
+
+  @@map("xml_documents")
+}
+
+model XMLItem {
+  id              String   @id @default(cuid())
+  xmlDocumentId   String
+  codigo          String
+  descricao       String
+  ncm             String
+  cfop            String
+  quantidade      Float
+  valorUnitario   Float
+  valorTotal      Float
+  cst             String
+  aliquotaIcms    Float
+  valorIcms       Float
+  aliquotaIpi     Float?
+  valorIpi        Float?
+  aliquotaPis     Float?
+  valorPis        Float?
+  aliquotaCofins  Float?
+  valorCofins     Float?
+  createdAt       DateTime @default(now())
+
+  // Relations
+  xmlDocument XMLDocument @relation(fields: [xmlDocumentId], references: [id], onDelete: Cascade)
+
+  @@map("xml_items")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  AUDITOR
+}
+
+enum DocumentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  ERROR
+}
+
+enum LogLevel {
+  ERROR
+  WARN
+  INFO
+  DEBUG
+}
+
+enum ProcessamentoStatus {
+  PENDENTE
+  PROCESSANDO
+  CONCLUIDO
+  ERRO
+}
+
+model Processamento {
+  id          String             @id @default(cuid())
+  userId      String
+  documentoId String
+  status      ProcessamentoStatus
+  resultado   Json?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  // Relations
+  user     User     @relation(fields: [userId], references: [id])
+  documento Document @relation(fields: [documentoId], references: [id])
+
+  @@map("processamentos")
+}

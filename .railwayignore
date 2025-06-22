@@ -1,0 +1,39 @@
+# Arquivos de desenvolvimento
+node_modules/
+.env
+.env.local
+.env.development
+.env.test
+
+# Arquivos de teste
+tests/
+*.test.js
+*.test.ts
+jest.config.js
+
+# Arquivos de build temporários
+*.log
+logs/
+coverage/
+
+# Arquivos de desenvolvimento
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Arquivos de backup
+*.bak
+*.backup
+
+# Arquivos de documentação
+README.md
+docs/
+*.md
+
+# Arquivos de configuração local
+tsconfig.emergency.json
+emergency-server.*
+ultra-simple-server.*
+test-server.*
+server-simple.* 
