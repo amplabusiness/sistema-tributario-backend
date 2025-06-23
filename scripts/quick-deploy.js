@@ -1,51 +1,93 @@
 #!/usr/bin/env node
 
 /**
- * Deploy Rápido - Sistema Tributário
- * Script simplificado para deploy no Vercel
+ * Deploy Rápido 100% IA
+ * Executa o deploy automatizado com interação mínima
  */
 
 const { execSync } = require('child_process');
-const crypto = require('crypto');
+const readline = require('readline');
 
-console.log('⚡ Deploy Rápido - Sistema Tributário\n');
+console.log('🚀 DEPLOY RÁPIDO 100% IA - SISTEMA TRIBUTÁRIO');
+console.log('==============================================\n');
 
-// Gerar chaves
-const jwtSecret = crypto.randomBytes(64).toString('hex');
-const apiKey = crypto.randomBytes(32).toString('hex');
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
-console.log('🔑 Chaves geradas:');
-console.log(`JWT_SECRET: ${jwtSecret}`);
-console.log(`API_KEY: ${apiKey}\n`);
+function askQuestion(question) {
+  return new Promise((resolve) => {
+    rl.question(question, (answer) => {
+      resolve(answer.toLowerCase());
+    });
+  });
+}
 
-console.log('📋 Variáveis para configurar no Vercel Dashboard:\n');
+async function quickDeploy() {
+  try {
+    console.log('🔍 Verificando ambiente...');
+    
+    // Verificar se está no diretório correto
+    const packageJson = require('../../package.json');
+    if (!packageJson.name.includes('sistema-tributario')) {
+      throw new Error('Execute este script no diretório do projeto sistema-tributario-backend');
+    }
+    
+    console.log('✅ Ambiente verificado');
+    
+    // Perguntar se tem chave OpenAI
+    const hasOpenAI = await askQuestion('🤖 Você tem uma chave da OpenAI? (s/n): ');
+    
+    if (hasOpenAI === 's' || hasOpenAI === 'sim' || hasOpenAI === 'y' || hasOpenAI === 'yes') {
+      const openaiKey = await askQuestion('🔑 Digite sua chave OpenAI (ou pressione Enter para pular): ');
+      
+      if (openaiKey && openaiKey.trim()) {
+        // Atualizar o script com a chave real
+        const autoDeployPath = require.resolve('./auto-deploy.js');
+        let autoDeployContent = require('fs').readFileSync(autoDeployPath, 'utf8');
+        autoDeployContent = autoDeployContent.replace(
+          "OPENAI_API_KEY: '[SUA_CHAVE_OPENAI_AQUI]'",
+          `OPENAI_API_KEY: '${openaiKey.trim()}'`
+        );
+        require('fs').writeFileSync(autoDeployPath, autoDeployContent);
+        console.log('✅ Chave OpenAI configurada');
+      }
+    }
+    
+    // Perguntar se quer fazer deploy agora
+    const deployNow = await askQuestion('🚀 Fazer deploy agora? (s/n): ');
+    
+    if (deployNow === 's' || deployNow === 'sim' || deployNow === 'y' || deployNow === 'yes') {
+      console.log('\n🤖 INICIANDO DEPLOY AUTOMATIZADO...\n');
+      
+      // Executar o script de deploy automatizado
+      execSync('node scripts/auto-deploy.js', { stdio: 'inherit' });
+      
+    } else {
+      console.log('\n📋 Para fazer deploy manualmente:');
+      console.log('1. node scripts/auto-deploy.js');
+      console.log('2. Ou use: npm run deploy');
+      console.log('\n🔗 Links úteis:');
+      console.log('- Vercel Dashboard: https://vercel.com/dashboard');
+      console.log('- Supabase Dashboard: https://supabase.com/dashboard/project/pdlxgzcdsmdppddulcko');
+    }
+    
+  } catch (error) {
+    console.error('❌ Erro no deploy rápido:', error.message);
+    console.log('\n🔧 Solução:');
+    console.log('1. Verifique se está no diretório correto');
+    console.log('2. Execute: npm install');
+    console.log('3. Execute: npm run build');
+    console.log('4. Tente novamente: node scripts/quick-deploy.js');
+  } finally {
+    rl.close();
+  }
+}
 
-console.log('=== VARIÁVEIS DE AMBIENTE ===');
-console.log(`NODE_ENV=production`);
-console.log(`JWT_SECRET=${jwtSecret}`);
-console.log(`API_KEY=${apiKey}`);
-console.log(`REDIS_URL=redis://localhost:6379`);
-console.log(`DATABASE_URL=postgresql://postgres:[password]@[host]:5432/postgres`);
-console.log(`OPENAI_API_KEY=sua_openai_api_key_aqui\n`);
+// Executar se chamado diretamente
+if (require.main === module) {
+  quickDeploy();
+}
 
-console.log('🚀 Comandos para deploy:\n');
-
-console.log('1. Instalar Vercel CLI:');
-console.log('npm install -g vercel\n');
-
-console.log('2. Login no Vercel:');
-console.log('vercel login\n');
-
-console.log('3. Deploy:');
-console.log('vercel --prod\n');
-
-console.log('📋 Passos manuais:\n');
-
-console.log('1. Vá para: https://vercel.com/dashboard');
-console.log('2. Clique em "New Project"');
-console.log('3. Importe: amplabusiness/sistema-tributario-backend');
-console.log('4. Configure as variáveis acima');
-console.log('5. Clique em "Deploy"\n');
-
-console.log('✅ Script concluído!');
-console.log('💡 Dica: Copie as variáveis acima e cole no Vercel Dashboard'); 
+module.exports = { quickDeploy }; 

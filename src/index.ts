@@ -1,10 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import path from 'path';
-import multiEmpresaRouter from './routes/multi-empresa';
-import { authRoutes } from './routes/auth';
-import { documentsRoutes } from './routes/documents';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,10 +22,15 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Registrar todas as rotas
-app.use('/api/auth', authRoutes);
-app.use('/api/v1/documents', documentsRoutes);
-app.use('/api/multi-empresa', multiEmpresaRouter);
+// Status endpoint
+app.get('/api/status', (req, res) => {
+  res.json({
+    success: true,
+    message: 'API funcionando corretamente',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
 
 // Rota básica de upload para AVIZ
 app.post('/api/upload', (req, res) => {
@@ -56,7 +57,9 @@ app.post('/api/upload', (req, res) => {
         documentType: fileType,
         processingTime: Math.random() * 1000
       }
-    };    console.log(`📄 Arquivo processado: ${fileName} (${fileType})`);
+    };
+
+    console.log(`📄 Arquivo processado: ${fileName} (${fileType})`);
 
     return res.json({
       success: true,
@@ -214,70 +217,49 @@ app.post('/api/federal/analyze', (req, res) => {
   }
 });
 
-// Rota para dashboard
-app.get('/api/dashboard', (req, res) => {
-  const dashboard = {
-    empresas: [
-      {
-        id: 'empresa-1',
-        nome: 'Empresa Teste LTDA',
-        cnpj: '12.345.678/0001-90',
-        documentos: 15,
-        ultimaAtualizacao: '2025-01-15T12:00:00Z'
-      }
-    ],
-    estatisticas: {
-      totalDocumentos: 15,
-      documentosProcessados: 12,
-      documentosPendentes: 3,
-      totalICMS: 125000.50,
-      totalFederal: 82700.00
-    },
-    alertas: [
-      {
-        tipo: 'info',
-        mensagem: 'Sistema funcionando normalmente',
-        timestamp: new Date().toISOString()
-      }
-    ]
-  };
-
-  res.json({
-    success: true,
-    data: dashboard
-  });
-});
-
 // Rota raiz
 app.get('/', (req, res) => {
   res.json({
-    message: '🚀 Sistema Tributário - Backend Funcionando!',
+    success: true,
+    message: 'Sistema Tributário 100% IA - Backend API',
     version: '1.0.0',
+    timestamp: new Date().toISOString(),
     endpoints: {
       health: '/health',
+      status: '/api/status',
       upload: '/api/upload',
       documents: '/api/documents',
-      icms: '/api/icms/analyze',
-      federal: '/api/federal/analyze',
-      dashboard: '/api/dashboard'
-    },
-    status: 'online'
+      icmsAnalyze: '/api/icms/analyze',
+      federalAnalyze: '/api/federal/analyze'
+    }
   });
 });
 
-// Iniciar servidor SOMENTE se não estiver em ambiente de teste/importação
-if (require.main === module) {
+// Middleware de tratamento de erro
+app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('❌ Erro não tratado:', error);
+  res.status(500).json({
+    success: false,
+    error: 'Erro interno do servidor',
+    message: process.env.NODE_ENV === 'development' ? error.message : 'Erro interno'
+  });
+});
+
+// Middleware para rotas não encontradas
+app.use('*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    error: 'Rota não encontrada',
+    path: req.originalUrl
+  });
+});
+
+// Inicialização do servidor
+if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando na porta ${PORT}`);
     console.log(`📊 Health check: http://localhost:${PORT}/health`);
-    console.log(`📄 Upload: http://localhost:${PORT}/api/upload`);
-    console.log(`📊 Dashboard: http://localhost:${PORT}/api/dashboard`);
-  });
-
-  // Graceful shutdown
-  process.on('SIGINT', () => {
-    console.log('🛑 Recebido SIGINT, fechando servidor...');
-    process.exit(0);
+    console.log(`🔗 API Status: http://localhost:${PORT}/api/status`);
   });
 }
 

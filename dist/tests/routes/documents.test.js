@@ -37,6 +37,9 @@ jest.mock('../../src/services/agents/document-parser-agent', () => ({
         processarDocumento: jest.fn(),
     },
 }));
+jest.mock('../../src/middleware/auth', () => ({
+    authenticateToken: (req, res, next) => next(),
+}));
 describe('Document Routes', () => {
     const mockPrisma = require('../../src/utils/prisma').default;
     const mockDocumentParserAgent = require('../../src/services/agents/document-parser-agent').documentParserAgent;
