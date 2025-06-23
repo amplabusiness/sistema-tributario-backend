@@ -16,7 +16,7 @@ class PrecificacaoMargemAgent {
         const startTime = Date.now();
         const dashboardId = `precificacao_${empresaId}_${periodo}_${Date.now()}`;
         try {
-            console.log('🚀 AGENTE 6: Iniciando análise de precificação 100% autônoma', {
+            console.log('🚀 AGENTE 6: Iniciando analise de precificacao 100% autonoma', {
                 empresaId,
                 periodo,
                 dashboardId,
@@ -48,7 +48,7 @@ class PrecificacaoMargemAgent {
             await this.salvarDashboard(dashboard);
             await this.gerarRelatoriosAutomaticamente(dashboard);
             const tempoProcessamento = Date.now() - startTime;
-            console.log('✅ AGENTE 6: Análise de precificação concluída com sucesso', {
+            console.log('✅ AGENTE 6: Análise de precificacao concluída com sucesso', {
                 dashboardId,
                 produtos: precificacoes.length,
                 confianca: `${confianca}%`,
@@ -57,7 +57,7 @@ class PrecificacaoMargemAgent {
             return dashboard;
         }
         catch (error) {
-            console.error('❌ AGENTE 6: Erro na análise de precificação', error instanceof Error ? error : new Error('Unknown error'));
+            console.error('❌ AGENTE 6: Erro na analise de precificacao', error instanceof Error ? error : new Error('Unknown error'));
             return {
                 id: dashboardId,
                 empresaId,
@@ -76,8 +76,8 @@ class PrecificacaoMargemAgent {
                     produtosPrejuizo: 0,
                     produtosOtimizacao: 0,
                 },
-                alertas: ['Erro na análise automática'],
-                observacoes: ['Erro na análise automática'],
+                alertas: ['Erro na analise automática'],
+                observacoes: ['Erro na analise automática'],
                 status: 'erro',
                 confianca: 0,
             };
@@ -130,7 +130,7 @@ class PrecificacaoMargemAgent {
     }
     async analisarCargaTributariaAutomaticamente(dadosProdutos) {
         try {
-            console.log('🏛️ AGENTE 6: Analisando carga tributária automaticamente');
+            console.log('🏛️ AGENTE 6: Analisando carga tributaria automaticamente');
             const analisesTributarias = [];
             for (const produto of dadosProdutos) {
                 const icms = this.calcularICMS(produto);
@@ -149,13 +149,13 @@ class PrecificacaoMargemAgent {
                     beneficios: this.identificarBeneficiosFiscais(produto),
                 });
             }
-            console.log('✅ AGENTE 6: Carga tributária analisada', {
+            console.log('✅ AGENTE 6: Carga tributaria analisada', {
                 produtos: analisesTributarias.length,
             });
             return analisesTributarias;
         }
         catch (error) {
-            console.error('❌ AGENTE 6: Erro ao analisar carga tributária', error instanceof Error ? error : new Error('Unknown error'));
+            console.error('❌ AGENTE 6: Erro ao analisar carga tributaria', error instanceof Error ? error : new Error('Unknown error'));
             return [];
         }
     }
@@ -189,7 +189,7 @@ class PrecificacaoMargemAgent {
     }
     async calcularPrecificacaoAutomaticamente(analisesCustos, analisesTributarias, analisesMercado) {
         try {
-            console.log('🧮 AGENTE 6: Calculando precificação automaticamente');
+            console.log('🧮 AGENTE 6: Calculando precificacao automaticamente');
             const precificacoes = [];
             for (let i = 0; i < analisesCustos.length; i++) {
                 const custo = analisesCustos[i];
@@ -227,7 +227,7 @@ class PrecificacaoMargemAgent {
             return precificacoes;
         }
         catch (error) {
-            console.error('❌ AGENTE 6: Erro ao calcular precificação', error instanceof Error ? error : new Error('Unknown error'));
+            console.error('❌ AGENTE 6: Erro ao calcular precificacao', error instanceof Error ? error : new Error('Unknown error'));
             return [];
         }
     }
@@ -237,7 +237,7 @@ class PrecificacaoMargemAgent {
     
     Dados:
     - Custo total: R$ ${custo.custoTotal}
-    - Carga tributária: R$ ${tributario.cargaTributaria} (${tributario.percentualCarga}%)
+    - Carga tributaria: R$ ${tributario.cargaTributaria} (${tributario.percentualCarga}%)
     - Preço médio do mercado: R$ ${mercado.precoMedio}
     - Elasticidade de preço: ${mercado.elasticidade}
     - Competitividade: ${mercado.competitividade}
@@ -310,7 +310,7 @@ class PrecificacaoMargemAgent {
             console.log('💡 AGENTE 6: Gerando recomendações automaticamente');
             const recomendacoes = [];
             const prompt = `
-      Analise os dados de precificação e margens e gere recomendações estratégicas.
+      Analise os dados de precificacao e margens e gere recomendações estratégicas.
       
       Dados:
       - Total de produtos: ${precificacoes.length}
@@ -391,14 +391,14 @@ class PrecificacaoMargemAgent {
     async gerarObservacoesAutomaticamente(totais) {
         const observacoes = [];
         const prompt = `
-    Analise os dados de precificação e margens e gere observações técnicas relevantes.
+    Analise os dados de precificacao e margens e gere observações técnicas relevantes.
     
     Dados:
     - Total de produtos: ${totais.totalProdutos}
     - Valor total de vendas: ${(0, br_utils_1.formatarValorBR)(totais.valorTotalVendas)}
     - Margem bruta média: ${(0, br_utils_1.formatarPercentualBR)(totais.margemBrutaMedia)}
     - Margem líquida média: ${(0, br_utils_1.formatarPercentualBR)(totais.margemLiquidaMedia)}
-    - Carga tributária média: ${(0, br_utils_1.formatarPercentualBR)(totais.cargaTributariaMedia)}
+    - Carga tributaria média: ${(0, br_utils_1.formatarPercentualBR)(totais.cargaTributariaMedia)}
     - Rentabilidade média: ${(0, br_utils_1.formatarPercentualBR)(totais.rentabilidadeMedia)}
     - Produtos lucrativos: ${totais.produtosLucrativos}
     - Produtos com prejuízo: ${totais.produtosPrejuizo}

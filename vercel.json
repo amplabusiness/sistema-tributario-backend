@@ -3,15 +3,7 @@
   "builds": [
     {
       "src": "src/index.ts",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": [
-          "src/**/*",
-          "prisma/**/*",
-          "package.json",
-          "tsconfig.json"
-        ]
-      }
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -22,11 +14,6 @@
   ],
   "env": {
     "NODE_ENV": "production"
-  },
-  "functions": {
-    "src/index.ts": {
-      "maxDuration": 30
-    }
   },
   "buildCommand": "npm run vercel-build"
 } 

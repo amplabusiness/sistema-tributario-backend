@@ -124,7 +124,7 @@ class DocumentParserAgent {
         try {
             const analiseIA = await (0, openai_service_1.analisarXML)(conteudo, 'XML');
             if (!analiseIA.success) {
-                throw new Error('Falha na análise IA do XML');
+                throw new Error('Falha na analise IA do XML');
             }
             const dados = this.extrairDadosXML(conteudo);
             return {
@@ -144,7 +144,7 @@ class DocumentParserAgent {
         try {
             const analiseIA = await (0, openai_service_1.analisarXML)(conteudo, 'SPED');
             if (!analiseIA.success) {
-                throw new Error('Falha na análise IA do SPED');
+                throw new Error('Falha na analise IA do SPED');
             }
             const dados = this.extrairDadosSPED(conteudo);
             return {
@@ -308,10 +308,10 @@ class DocumentParserAgent {
             return validacao;
         }
         catch (error) {
-            console.error('Erro na validação IA', {
+            console.error('Erro na validacao IA', {
                 error: error instanceof Error ? error.message : 'Unknown error',
             });
-            return { success: false, error: 'Falha na validação IA' };
+            return { success: false, error: 'Falha na validacao IA' };
         }
     }
     extrairDadosXML(conteudo) {

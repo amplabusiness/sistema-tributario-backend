@@ -161,7 +161,7 @@ router.post('/frontend', async (req, res) => {
 });
 router.post('/quality', async (req, res) => {
     try {
-        logger_1.logger.info('🔍 Iniciando análise de qualidade...');
+        logger_1.logger.info('🔍 Iniciando analise de qualidade...');
         const result = {
             success: true,
             fixedIssues: []
@@ -173,7 +173,7 @@ router.post('/quality', async (req, res) => {
         });
     }
     catch (error) {
-        logger_1.logger.error('❌ Erro na análise de qualidade:', error);
+        logger_1.logger.error('❌ Erro na analise de qualidade:', error);
         res.status(500).json({
             success: false,
             error: 'Erro interno do servidor',
@@ -183,7 +183,7 @@ router.post('/quality', async (req, res) => {
 });
 router.post('/devops', async (req, res) => {
     try {
-        logger_1.logger.info('🚀 Iniciando configuração DevOps...');
+        logger_1.logger.info('🚀 Iniciando configuracao DevOps...');
         const { DevOpsAgent } = await Promise.resolve().then(() => __importStar(require('../services/agents/devops-agent')));
         const agent = new DevOpsAgent({
             openaiApiKey: process.env.OPENAI_API_KEY,
@@ -198,7 +198,7 @@ router.post('/devops', async (req, res) => {
         });
     }
     catch (error) {
-        logger_1.logger.error('❌ Erro na configuração DevOps:', error);
+        logger_1.logger.error('❌ Erro na configuracao DevOps:', error);
         res.status(500).json({
             success: false,
             error: 'Erro interno do servidor',

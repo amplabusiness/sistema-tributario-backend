@@ -11,11 +11,11 @@ router.post('/apurar', auth_1.authenticateToken, [
     (0, express_validator_1.body)('empresaId').isString().notEmpty().withMessage('ID da empresa é obrigatório'),
     (0, express_validator_1.body)('periodo').isString().matches(/^\d{2}\/\d{4}$/).withMessage('Período deve estar no formato MM/AAAA'),
     (0, express_validator_1.body)('documentos').optional().isArray().withMessage('Documentos deve ser um array'),
-    (0, express_validator_1.body)('tipoApuracao').optional().isIn(['pis_cofins', 'irpj_csll', 'completa']).withMessage('Tipo de apuração inválido'),
+    (0, express_validator_1.body)('tipoApuracao').optional().isIn(['pis_cofins', 'irpj_csll', 'completa']).withMessage('Tipo de apuracao inválido'),
 ], validation_1.validateRequest, async (req, res) => {
     try {
         const { empresaId, periodo, documentos, tipoApuracao = 'completa' } = req.body;
-        console.log('🚀 API: Iniciando apuração Federal automática', {
+        console.log('🚀 API: Iniciando apuracao Federal automática', {
             empresaId,
             periodo,
             tipoApuracao,
@@ -69,17 +69,17 @@ router.post('/apurar', auth_1.authenticateToken, [
         });
     }
     catch (error) {
-        console.error('❌ API: Erro na apuração Federal', error instanceof Error ? error : new Error('Unknown error'));
+        console.error('❌ API: Erro na apuracao Federal', error instanceof Error ? error : new Error('Unknown error'));
         res.status(500).json({
             success: false,
-            message: 'Erro na apuração Federal',
+            message: 'Erro na apuracao Federal',
             error: error instanceof Error ? error.message : 'Erro desconhecido',
         });
     }
 });
 router.post('/documento/:documentId', auth_1.authenticateToken, [
     (0, express_validator_1.param)('documentId').isString().notEmpty().withMessage('ID do documento é obrigatório'),
-    (0, express_validator_1.body)('tipoApuracao').optional().isIn(['pis_cofins', 'irpj_csll', 'completa']).withMessage('Tipo de apuração inválido'),
+    (0, express_validator_1.body)('tipoApuracao').optional().isIn(['pis_cofins', 'irpj_csll', 'completa']).withMessage('Tipo de apuracao inválido'),
 ], validation_1.validateRequest, async (req, res) => {
     try {
         const { documentId } = req.params;
@@ -123,7 +123,7 @@ router.post('/documento/:documentId', auth_1.authenticateToken, [
 router.get('/apuracoes', auth_1.authenticateToken, [
     (0, express_validator_1.query)('empresaId').optional().isString().withMessage('ID da empresa deve ser string'),
     (0, express_validator_1.query)('periodo').optional().isString().withMessage('Período deve ser string'),
-    (0, express_validator_1.query)('tipoApuracao').optional().isIn(['pis_cofins', 'irpj_csll', 'completa']).withMessage('Tipo de apuração inválido'),
+    (0, express_validator_1.query)('tipoApuracao').optional().isIn(['pis_cofins', 'irpj_csll', 'completa']).withMessage('Tipo de apuracao inválido'),
     (0, express_validator_1.query)('limit').optional().isInt({ min: 1, max: 100 }).withMessage('Limit deve ser entre 1 e 100'),
     (0, express_validator_1.query)('offset').optional().isInt({ min: 0 }).withMessage('Offset deve ser >= 0'),
 ], validation_1.validateRequest, async (req, res) => {

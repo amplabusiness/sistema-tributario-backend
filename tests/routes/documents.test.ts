@@ -39,6 +39,11 @@ jest.mock('../../src/services/agents/document-parser-agent', () => ({
   },
 }));
 
+// Mock global do middleware de autenticação para todos os testes deste arquivo
+jest.mock('../../src/middleware/auth', () => ({
+  authenticateToken: (req: any, res: any, next: any) => next(),
+}));
+
 describe('Document Routes', () => {
   const mockPrisma = require('../../src/utils/prisma').default;
   const mockDocumentParserAgent = require('../../src/services/agents/document-parser-agent').documentParserAgent;

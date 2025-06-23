@@ -31,17 +31,17 @@ const openai = new openai_1.default({
     timeout: OPENAI_CONFIG.timeout,
 });
 const DEFAULT_PROMPTS = {
-    ANALISE_DOCUMENTO: `Você é um especialista em análise de documentos fiscais brasileiros. 
+    ANALISE_DOCUMENTO: `Você é um especialista em analise de documentos fiscais brasileiros. 
 Analise o documento fornecido e extraia as informações fiscais relevantes.
 Responda sempre em português brasileiro e use formatação brasileira para datas e valores.`,
-    VALIDACAO_DADOS: `Você é um especialista em validação de dados fiscais brasileiros.
+    VALIDACAO_DADOS: `Você é um especialista em validacao de dados fiscais brasileiros.
 Valide os dados fornecidos e identifique possíveis inconsistências ou erros.
 Responda sempre em português brasileiro.`,
     RELATORIO: `Você é um especialista em geração de relatórios fiscais brasileiros.
 Gere um relatório claro e detalhado com as informações fornecidas.
 Use formatação brasileira para datas, valores e percentuais.
 Responda sempre em português brasileiro.`,
-    ANALISE_XML: `Você é um especialista em análise de arquivos XML e SPED brasileiros.
+    ANALISE_XML: `Você é um especialista em analise de arquivos XML e SPED brasileiros.
 Analise o conteúdo XML fornecido e extraia as informações fiscais relevantes.
 Identifique CST, CFOP, NCM, valores, impostos e outras informações importantes.
 Responda sempre em português brasileiro.`,
@@ -173,7 +173,7 @@ async function validarDadosFiscais(dados, tipoValidacao = 'geral') {
 
 ${JSON.stringify(dados, null, 2)}
 
-Tipo de validação: ${tipoValidacao}
+Tipo de validacao: ${tipoValidacao}
 
 Por favor, verifique:
 1. Consistência dos dados
@@ -181,7 +181,7 @@ Por favor, verifique:
 3. Regras fiscais aplicáveis
 4. Possíveis erros ou inconsistências
 
-Responda em formato JSON com os resultados da validação.`,
+Responda em formato JSON com os resultados da validacao.`,
     };
     return makeOpenAIRequest(prompt);
 }

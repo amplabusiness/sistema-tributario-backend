@@ -261,7 +261,7 @@ router.post('/icms-apuracao', upload.single('regras'), async (req, res) => {
         return res.json({ success: true, resultado, regrasCount: regras.length, itensCount: itens.length });
     }
     catch (error) {
-        logger_1.default.error('Erro na apuração dinâmica de ICMS', {
+        logger_1.default.error('Erro na apuracao dinâmica de ICMS', {
             error: error instanceof Error ? error.message : 'Unknown error'
         });
         return res.status(500).json({ success: false, error: 'Erro interno do servidor' });

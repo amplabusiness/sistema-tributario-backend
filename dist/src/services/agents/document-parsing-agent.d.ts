@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { ParsedDocument, CompanyData } from '../parsers/document-parser';
 export interface DocumentParsingResult {
     success: boolean;
     documentId: string;

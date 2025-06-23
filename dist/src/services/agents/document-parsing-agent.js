@@ -24,15 +24,23 @@ class DocumentParsingAgent {
         try {
             const { fileName, fileType, content, empresaId } = req.body;
             if (!fileName || !fileType || !content) {
-                return res.status(400).json({
+                res.status(400).json({
                     success: false,
                     error: 'Dados obrigatorios: fileName, fileType, content'
                 });
+                return;
             }
             console.log(`📄 Processando documento: ${fileName} (${fileType})`);
-            const parsedData = await this.documentParser.parse(fileType, content);
-            const indexedData = await this.documentIndexer.index(parsedData, empresaId);
-            console.log(`✅ Documento processado: ${fileName} - ${indexedData.totalRegistros} registros`);
+            const tempPath = `/tmp/${fileName}`;
+            require('fs').writeFileSync(tempPath, content);
+            const parsedData = await this.documentParser.parseDocument(tempPath);
+            await this.documentIndexer.indexarDocumento({
+                userId: empresaId || '',
+                tipo: fileType,
+                conteudo: parsedData,
+                empresaId: empresaId || ''
+            });
+            console.log(`✅ Documento processado: ${fileName}`);
             res.json({
                 success: true,
                 message: 'Documento processado com sucesso!',
@@ -40,9 +48,6 @@ class DocumentParsingAgent {
                     fileName,
                     fileType,
                     empresaId,
-                    totalRegistros: indexedData.totalRegistros,
-                    registrosProcessados: indexedData.registrosProcessados,
-                    erros: indexedData.erros,
                     processadoEm: new Date().toISOString()
                 }
             });
@@ -127,49 +132,46 @@ class DocumentParsingAgent {
             result.extractedData = parsedDocument;
             const companyData = parsedDocument.companyData;
             if (companyData.cnpj) {
-                let empresa = await empresa_service_1.EmpresaService.findByCnpj(companyData.cnpj);
+                let empresa = await empresa_service_1.EmpresaService.getEmpresaByCnpj(companyData.cnpj);
                 if (!empresa) {
-                    console.log(`Empresa não encontrada, cadastrando automaticamente: ${companyData.cnpj}`);
-                    empresa = await empresa_service_1.EmpresaService.createEmpresa({
+                    console.log(`🏢 Registrando nova empresa: ${companyData.cnpj}`);
+                    const empresaData = {
                         cnpj: companyData.cnpj,
                         razaoSocial: companyData.razaoSocial || 'Empresa não identificada',
                         nomeFantasia: companyData.nomeFantasia,
                         ie: companyData.ie,
                         im: companyData.im,
-                        cnae: companyData.cnae, endereco: companyData.endereco ? JSON.stringify(companyData.endereco) : undefined,
-                        regimeTributario: companyData.regimeTributario,
-                    });
-                    if (empresa) {
-                        result.autoRegisteredCompany = true;
-                        console.log(`Empresa cadastrada automaticamente: ${empresa.id}`);
-                    }
+                        cnae: companyData.cnae,
+                        endereco: companyData.endereco ?
+                            `${companyData.endereco.logradouro}, ${companyData.endereco.numero} - ${companyData.endereco.bairro}, ${companyData.endereco.municipio}/${companyData.endereco.uf}` :
+                            undefined,
+                        regimeTributario: companyData.regimeTributario
+                    };
+                    empresa = await empresa_service_1.EmpresaService.createOrUpdateEmpresa(empresaData);
+                    result.autoRegisteredCompany = true;
                 }
-                if (empresa) {
-                    result.companyId = empresa.id;
-                }
-            }
-            if (parsedDocument.fiscalData) {
-                await this.processFiscalData(parsedDocument, result.companyId);
+                result.companyId = empresa.id;
             }
             const validationErrors = this.validateExtractedData(parsedDocument);
             result.validationErrors = validationErrors;
-            await this.indexDocument(parsedDocument, result.companyId);
-            await this.cacheService.set(`document:${result.documentId}`, parsedDocument, 3600);
-            result.success = validationErrors.length === 0;
+            const correctedDocument = await this.applyAutoCorrections(parsedDocument);
+            result.extractedData = correctedDocument;
+            await this.indexDocument(correctedDocument, result.companyId);
+            await this.processFiscalData(correctedDocument, result.companyId);
+            result.success = true;
             result.processingTime = Date.now() - startTime;
-            console.log(`Agente 2 concluído com sucesso: ${filePath}`, {
+            console.log(`✅ Agente 2 concluído: ${filePath}`, {
                 documentId: result.documentId,
                 companyId: result.companyId,
-                autoRegistered: result.autoRegisteredCompany,
                 validationErrors: result.validationErrors.length,
                 processingTime: result.processingTime
             });
             return result;
         }
         catch (error) {
+            console.error(`❌ Erro no Agente 2: ${filePath}`, error);
+            result.validationErrors.push(`Erro de processamento: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
             result.processingTime = Date.now() - startTime;
-            result.validationErrors.push(`Erro no processamento: ${error.message || 'Erro desconhecido'}`);
-            console.error(`Erro no Agente 2: ${filePath}`, { error, result });
             return result;
         }
     }
@@ -290,7 +292,7 @@ class DocumentParsingAgent {
             return result;
         }
         catch (error) {
-            console.error(`Erro na validação e correção: ${documentId}`, { error });
+            console.error(`Erro na validacao e correção: ${documentId}`, { error });
             throw error;
         }
     }

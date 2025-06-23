@@ -49,7 +49,7 @@ router.get('/info', (req, res) => {
         message: 'Informações do Sistema Tributário 100% IA',
         system: {
             name: 'Sistema Tributário Brasileiro 100% IA',
-            description: 'Primeiro sistema tributário totalmente autônomo do mundo',
+            description: 'Primeiro sistema tributário totalmente autonomo do mundo',
             version: '1.0.0',
             autonomy: '100% IA - Zero intervenção humana',
             language: 'Português Brasileiro',
@@ -60,7 +60,7 @@ router.get('/info', (req, res) => {
             intelligentParsing: 'Parsing inteligente de XML, SPED, ECD, ECF',
             taxCalculation: 'Cálculo automático de ICMS, PIS, COFINS, IRPJ, CSLL',
             inventoryControl: 'Controle automático de estoque e CIAP',
-            pricingAnalysis: 'Análise automática de precificação e margem',
+            pricingAnalysis: 'Análise automática de precificacao e margem',
             reporting: 'Relatórios e dashboards automáticos',
             alerts: 'Alertas e notificações automáticas',
             automatedDevelopment: 'Desenvolvimento automatizado com agentes IA',
@@ -68,7 +68,7 @@ router.get('/info', (req, res) => {
         agents: {
             total: 11,
             status: 'Todos ativos e funcionando',
-            autonomy: '100% autônomos',
+            autonomy: '100% autonomos',
             development: {
                 testFix: 'Correção automática de testes',
                 frontendDev: 'Desenvolvimento frontend automatizado',

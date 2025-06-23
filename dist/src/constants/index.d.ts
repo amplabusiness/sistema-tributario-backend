@@ -22,7 +22,7 @@ export declare const MESSAGES: {
         readonly CACHE_CLEARED: "Cache limpo com sucesso";
     };
     readonly ERROR: {
-        readonly VALIDATION_ERROR: "Erro de validação";
+        readonly VALIDATION_ERROR: "Erro de validacao";
         readonly UNAUTHORIZED: "Não autorizado";
         readonly FORBIDDEN: "Acesso negado";
         readonly NOT_FOUND: "Recurso não encontrado";

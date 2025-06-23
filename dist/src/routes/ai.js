@@ -24,7 +24,7 @@ router.post('/analisar-documento', [
 ], handleValidationErrors, async (req, res) => {
     try {
         const { conteudo, tipoDocumento = 'XML' } = req.body;
-        console.log('Iniciando análise de documento fiscal', {
+        console.log('Iniciando analise de documento fiscal', {
             tipoDocumento,
             tamanhoConteudo: conteudo.length,
         });
@@ -32,7 +32,7 @@ router.post('/analisar-documento', [
         if (!resultado.success) {
             return res.status(constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
                 success: false,
-                message: 'Erro na análise do documento',
+                message: 'Erro na analise do documento',
                 error: resultado.error,
             });
         }
@@ -61,11 +61,11 @@ router.post('/analisar-documento', [
 });
 router.post('/validar-dados', [
     (0, express_validator_1.body)('dados').isObject().withMessage('Dados são obrigatórios'),
-    (0, express_validator_1.body)('tipoValidacao').optional().isString().withMessage('Tipo de validação deve ser string'),
+    (0, express_validator_1.body)('tipoValidacao').optional().isString().withMessage('Tipo de validacao deve ser string'),
 ], handleValidationErrors, async (req, res) => {
     try {
         const { dados, tipoValidacao = 'geral' } = req.body;
-        console.log('Iniciando validação de dados fiscais', {
+        console.log('Iniciando validacao de dados fiscais', {
             tipoValidacao,
             campos: Object.keys(dados),
         });
@@ -73,7 +73,7 @@ router.post('/validar-dados', [
         if (!resultado.success) {
             return res.status(constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
                 success: false,
-                message: 'Erro na validação dos dados',
+                message: 'Erro na validacao dos dados',
                 error: resultado.error,
             });
         }
@@ -147,7 +147,7 @@ router.post('/analisar-xml', [
 ], handleValidationErrors, async (req, res) => {
     try {
         const { conteudoXML, tipo = 'XML' } = req.body;
-        console.log('Iniciando análise de XML/SPED', {
+        console.log('Iniciando analise de XML/SPED', {
             tipo,
             tamanhoConteudo: conteudoXML.length,
         });
@@ -155,7 +155,7 @@ router.post('/analisar-xml', [
         if (!resultado.success) {
             return res.status(constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
                 success: false,
-                message: 'Erro na análise do XML',
+                message: 'Erro na analise do XML',
                 error: resultado.error,
             });
         }

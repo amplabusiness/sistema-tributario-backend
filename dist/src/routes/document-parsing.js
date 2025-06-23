@@ -5,7 +5,7 @@ const document_parsing_agent_1 = require("../services/agents/document-parsing-ag
 const logger_1 = require("../utils/logger");
 const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
-const documentParsingAgent = new document_parsing_agent_1.DocumentParsingAgent();
+const documentParsingAgent = document_parsing_agent_1.DocumentParsingAgent.getInstance();
 router.post('/process', auth_1.authenticateToken, async (req, res) => {
     try {
         const { filePath } = req.body;
@@ -64,7 +64,7 @@ router.get('/validate/:documentId', auth_1.authenticateToken, async (req, res) =
         });
     }
     catch (error) {
-        (0, logger_1.logError)('Erro na validação de documento', error);
+        (0, logger_1.logError)('Erro na validacao de documento', error);
         return res.status(500).json({
             success: false,
             error: 'Erro interno do servidor',
@@ -204,11 +204,11 @@ router.get('/validation-rules', auth_1.authenticateToken, async (req, res) => {
         return res.json({
             success: true,
             data: validationRules,
-            message: 'Regras de validação'
+            message: 'Regras de validacao'
         });
     }
     catch (error) {
-        (0, logger_1.logError)('Erro ao obter regras de validação', error);
+        (0, logger_1.logError)('Erro ao obter regras de validacao', error);
         return res.status(500).json({
             success: false,
             error: 'Erro interno do servidor'

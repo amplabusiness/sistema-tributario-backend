@@ -4,7 +4,7 @@ import { logInfo, logError } from '../utils/logger';
 import { authenticateToken } from '../middleware/auth';
 
 const router = Router();
-const documentParsingAgent = new DocumentParsingAgent();
+const documentParsingAgent = DocumentParsingAgent.getInstance();
 
 /**
  * POST /api/document-parsing/process

@@ -138,10 +138,10 @@ app.post('/api/icms/analyze', (req, res) => {
         });
     }
     catch (error) {
-        console.error('❌ Erro na análise ICMS:', error);
+        console.error('❌ Erro na analise ICMS:', error);
         res.status(500).json({
             success: false,
-            error: 'Erro na análise ICMS'
+            error: 'Erro na analise ICMS'
         });
     }
 });
@@ -184,10 +184,10 @@ app.post('/api/federal/analyze', (req, res) => {
         });
     }
     catch (error) {
-        console.error('❌ Erro na análise Federal:', error);
+        console.error('❌ Erro na analise Federal:', error);
         res.status(500).json({
             success: false,
-            error: 'Erro na análise Federal'
+            error: 'Erro na analise Federal'
         });
     }
 });

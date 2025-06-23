@@ -18,7 +18,7 @@ class EstoqueCIAPAgent {
         const startTime = Date.now();
         const apuracaoId = `estoque_${empresaId}_${periodo}_${Date.now()}`;
         try {
-            console.log('🚀 AGENTE 5: Iniciando apuração Estoque & CIAP 100% autônoma', {
+            console.log('🚀 AGENTE 5: Iniciando apuracao Estoque & CIAP 100% autonoma', {
                 empresaId,
                 periodo,
                 apuracaoId,
@@ -59,7 +59,7 @@ class EstoqueCIAPAgent {
             return apuracao;
         }
         catch (error) {
-            console.error('❌ AGENTE 5: Erro na apuração Estoque & CIAP', error instanceof Error ? error : new Error('Unknown error'));
+            console.error('❌ AGENTE 5: Erro na apuracao Estoque & CIAP', error instanceof Error ? error : new Error('Unknown error'));
             return {
                 id: apuracaoId,
                 empresaId,
@@ -78,8 +78,8 @@ class EstoqueCIAPAgent {
                     ciapPendente: 0,
                     discrepanciaInventario: 0,
                 },
-                alertas: ['Erro na apuração automática'],
-                observacoes: ['Erro na apuração automática'],
+                alertas: ['Erro na apuracao automática'],
+                observacoes: ['Erro na apuracao automática'],
                 status: 'erro',
                 confianca: 0,
             };
@@ -286,7 +286,7 @@ class EstoqueCIAPAgent {
             console.log('✅ AGENTE 5: Validação com inventário concluída');
         }
         catch (error) {
-            console.error('❌ AGENTE 5: Erro na validação com inventário', error instanceof Error ? error : new Error('Unknown error'));
+            console.error('❌ AGENTE 5: Erro na validacao com inventário', error instanceof Error ? error : new Error('Unknown error'));
         }
     }
     async gerarAlertasAutomaticamente() {

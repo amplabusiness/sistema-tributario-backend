@@ -157,7 +157,7 @@ router.post('/test-agents/:documentId', async (req, res) => {
         const { FederalAgent } = await Promise.resolve().then(() => __importStar(require('../services/agents/federal-agent')));
         const icmsAgent = new ICMSAgent();
         const federalAgent = new FederalAgent();
-        (0, logger_1.logInfo)('Testando agentes de apuração', { documentId });
+        (0, logger_1.logInfo)('Testando agentes de apuracao', { documentId });
         const icmsResults = await icmsAgent.processDocument(documentId);
         (0, logger_1.logInfo)('ICMS testado com sucesso', { documentId, count: icmsResults.length });
         const federalResults = await federalAgent.processDocument(documentId);

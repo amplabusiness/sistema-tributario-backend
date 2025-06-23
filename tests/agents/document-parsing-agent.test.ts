@@ -46,7 +46,7 @@ describe('DocumentParsingAgent', () => {
     (DocumentProcessor as any).getDocumentsByCompany = mockDocumentProcessor.getDocumentsByCompany;
     (DocumentProcessor as any).getAllDocuments = mockDocumentProcessor.getAllDocuments;
 
-    agent = new DocumentParsingAgent();
+    agent = DocumentParsingAgent.getInstance();
   });
 
   describe('processDocument', () => {

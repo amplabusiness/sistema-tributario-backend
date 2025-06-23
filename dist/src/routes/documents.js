@@ -382,14 +382,14 @@ router.post('/upload', upload.array('documents', 10), async (req, res) => {
                 });
                 const integrityResult = await integrityValidator.validateFile(file.path);
                 if (!integrityResult.isValid) {
-                    (0, logger_1.logError)('Falha na validação de integridade', {
+                    (0, logger_1.logError)('Falha na validacao de integridade', {
                         filename: file.originalname,
                         errors: integrityResult.errors
                     });
                     results.push({
                         filename: file.originalname,
                         success: false,
-                        error: 'Falha na validação de integridade',
+                        error: 'Falha na validacao de integridade',
                         details: integrityResult.errors
                     });
                     continue;
@@ -504,7 +504,7 @@ router.post('/validate-integrity', upload.single('file'), async (req, res) => {
             });
         }
         const file = req.file;
-        (0, logger_1.logInfo)('Testando validação de integridade', {
+        (0, logger_1.logInfo)('Testando validacao de integridade', {
             filename: file.originalname,
             size: file.size
         });
@@ -523,10 +523,10 @@ router.post('/validate-integrity', upload.single('file'), async (req, res) => {
         });
     }
     catch (error) {
-        (0, logger_1.logError)('Erro na validação de integridade', { error });
+        (0, logger_1.logError)('Erro na validacao de integridade', { error });
         return res.status(500).json({
             success: false,
-            message: 'Erro na validação de integridade',
+            message: 'Erro na validacao de integridade',
             error: error instanceof Error ? error.message : 'Unknown error'
         });
     }

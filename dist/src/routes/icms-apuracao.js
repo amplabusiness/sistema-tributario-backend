@@ -22,7 +22,7 @@ router.post('/apurar', auth_1.authenticateToken, [
 ], validation_1.validateRequest, async (req, res) => {
     try {
         const { empresaId, periodo, documentos, configuracoes } = req.body;
-        console.log('🚀 API: Iniciando apuração ICMS automática', {
+        console.log('🚀 API: Iniciando apuracao ICMS automática', {
             empresaId,
             periodo,
             documentos: documentos?.length || 0,
@@ -50,10 +50,10 @@ router.post('/apurar', auth_1.authenticateToken, [
         });
     }
     catch (error) {
-        console.error('❌ API: Erro na apuração ICMS', error instanceof Error ? error : new Error('Unknown error'));
+        console.error('❌ API: Erro na apuracao ICMS', error instanceof Error ? error : new Error('Unknown error'));
         res.status(500).json({
             success: false,
-            message: 'Erro na apuração ICMS',
+            message: 'Erro na apuracao ICMS',
             error: error instanceof Error ? error.message : 'Erro desconhecido',
         });
     }
@@ -99,11 +99,11 @@ router.get('/apuracoes', auth_1.authenticateToken, [
     }
 });
 router.get('/apuracoes/:id', auth_1.authenticateToken, [
-    (0, express_validator_1.param)('id').isString().notEmpty().withMessage('ID da apuração é obrigatório'),
+    (0, express_validator_1.param)('id').isString().notEmpty().withMessage('ID da apuracao é obrigatório'),
 ], validation_1.validateRequest, async (req, res) => {
     try {
         const { id } = req.params;
-        console.log('🔍 API: Consultando apuração ICMS específica', {
+        console.log('🔍 API: Consultando apuracao ICMS específica', {
             apuracaoId: id,
             userId: req.user?.id,
         });
@@ -121,10 +121,10 @@ router.get('/apuracoes/:id', auth_1.authenticateToken, [
         });
     }
     catch (error) {
-        console.error('❌ API: Erro ao consultar apuração', error instanceof Error ? error : new Error('Unknown error'));
+        console.error('❌ API: Erro ao consultar apuracao', error instanceof Error ? error : new Error('Unknown error'));
         return res.status(500).json({
             success: false,
-            message: 'Erro ao consultar apuração',
+            message: 'Erro ao consultar apuracao',
             error: error instanceof Error ? error.message : 'Erro desconhecido',
         });
     }
@@ -242,7 +242,7 @@ router.post('/regras/extrair', auth_1.authenticateToken, [
     }
 });
 router.get('/relatorios/:apuracaoId', auth_1.authenticateToken, [
-    (0, express_validator_1.param)('apuracaoId').isString().notEmpty().withMessage('ID da apuração é obrigatório'),
+    (0, express_validator_1.param)('apuracaoId').isString().notEmpty().withMessage('ID da apuracao é obrigatório'),
     (0, express_validator_1.query)('formato').optional().isIn(['pdf', 'excel', 'json']).withMessage('Formato inválido'),
 ], validation_1.validateRequest, async (req, res) => {
     try {

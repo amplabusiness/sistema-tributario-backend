@@ -24,14 +24,14 @@ router.post('/analisar', auth_1.authenticateToken, [
 ], validation_1.validateRequest, async (req, res) => {
     try {
         const { empresaId, periodo, produtos, configuracoes } = req.body;
-        console.log('🚀 API: Iniciando análise de precificação automática', {
+        console.log('🚀 API: Iniciando analise de precificacao automática', {
             empresaId,
             periodo,
             produtos: produtos?.length || 0,
             userId: req.user?.id,
         });
         const dashboard = await precificacaoAgent.analisarPrecificacaoAutomatico(empresaId, periodo, produtos);
-        console.log('✅ API: Análise de precificação concluída', {
+        console.log('✅ API: Análise de precificacao concluída', {
             dashboardId: dashboard.id,
             status: dashboard.status,
             confianca: dashboard.confianca,
@@ -39,7 +39,7 @@ router.post('/analisar', auth_1.authenticateToken, [
         });
         res.status(200).json({
             success: true,
-            message: 'Análise de precificação executada com sucesso',
+            message: 'Análise de precificacao executada com sucesso',
             data: {
                 dashboard,
                 metadata: {
@@ -53,10 +53,10 @@ router.post('/analisar', auth_1.authenticateToken, [
         });
     }
     catch (error) {
-        console.error('❌ API: Erro na análise de precificação', error instanceof Error ? error : new Error('Unknown error'));
+        console.error('❌ API: Erro na analise de precificacao', error instanceof Error ? error : new Error('Unknown error'));
         res.status(500).json({
             success: false,
-            message: 'Erro na análise de precificação',
+            message: 'Erro na analise de precificacao',
             error: error instanceof Error ? error.message : 'Erro desconhecido',
         });
     }
@@ -70,7 +70,7 @@ router.get('/dashboards', auth_1.authenticateToken, [
 ], validation_1.validateRequest, async (req, res) => {
     try {
         const { empresaId, periodo, status, limit = 20, offset = 0 } = req.query;
-        console.log('🔍 API: Consultando dashboards de precificação', {
+        console.log('🔍 API: Consultando dashboards de precificacao', {
             empresaId,
             periodo,
             status,
@@ -81,7 +81,7 @@ router.get('/dashboards', auth_1.authenticateToken, [
         const dashboards = [];
         res.status(200).json({
             success: true,
-            message: 'Dashboards de precificação consultados com sucesso',
+            message: 'Dashboards de precificacao consultados com sucesso',
             data: {
                 dashboards,
                 pagination: {
@@ -93,10 +93,10 @@ router.get('/dashboards', auth_1.authenticateToken, [
         });
     }
     catch (error) {
-        console.error('❌ API: Erro ao consultar dashboards de precificação', error instanceof Error ? error : new Error('Unknown error'));
+        console.error('❌ API: Erro ao consultar dashboards de precificacao', error instanceof Error ? error : new Error('Unknown error'));
         res.status(500).json({
             success: false,
-            message: 'Erro ao consultar dashboards de precificação',
+            message: 'Erro ao consultar dashboards de precificacao',
             error: error instanceof Error ? error.message : 'Erro desconhecido',
         });
     }
@@ -106,7 +106,7 @@ router.get('/dashboards/:id', auth_1.authenticateToken, [
 ], validation_1.validateRequest, async (req, res) => {
     try {
         const { id } = req.params;
-        console.log('🔍 API: Consultando dashboard de precificação específico', {
+        console.log('🔍 API: Consultando dashboard de precificacao específico', {
             dashboardId: id,
             userId: req.user?.id,
         });
@@ -138,7 +138,7 @@ router.get('/dashboard', auth_1.authenticateToken, [
 ], validation_1.validateRequest, async (req, res) => {
     try {
         const { empresaId, periodo } = req.query;
-        console.log('📊 API: Gerando dashboard de precificação', {
+        console.log('📊 API: Gerando dashboard de precificacao', {
             empresaId,
             periodo,
             userId: req.user?.id,
@@ -162,15 +162,15 @@ router.get('/dashboard', auth_1.authenticateToken, [
         };
         res.status(200).json({
             success: true,
-            message: 'Dashboard de precificação gerado com sucesso',
+            message: 'Dashboard de precificacao gerado com sucesso',
             data: { dashboard },
         });
     }
     catch (error) {
-        console.error('❌ API: Erro ao gerar dashboard de precificação', error instanceof Error ? error : new Error('Unknown error'));
+        console.error('❌ API: Erro ao gerar dashboard de precificacao', error instanceof Error ? error : new Error('Unknown error'));
         res.status(500).json({
             success: false,
-            message: 'Erro ao gerar dashboard de precificação',
+            message: 'Erro ao gerar dashboard de precificacao',
             error: error instanceof Error ? error.message : 'Erro desconhecido',
         });
     }
@@ -183,7 +183,7 @@ router.get('/produtos/:produtoId', auth_1.authenticateToken, [
     try {
         const { produtoId } = req.params;
         const { empresaId, periodo } = req.query;
-        console.log('🔍 API: Analisando precificação de produto específico', {
+        console.log('🔍 API: Analisando precificacao de produto específico', {
             produtoId,
             empresaId,
             periodo,
@@ -218,7 +218,7 @@ router.get('/margens', auth_1.authenticateToken, [
 ], validation_1.validateRequest, async (req, res) => {
     try {
         const { empresaId, periodo, tendencia } = req.query;
-        console.log('🔍 API: Consultando análises de margem', {
+        console.log('🔍 API: Consultando analises de margem', {
             empresaId,
             periodo,
             tendencia,
@@ -239,10 +239,10 @@ router.get('/margens', auth_1.authenticateToken, [
         });
     }
     catch (error) {
-        console.error('❌ API: Erro ao consultar análises de margem', error instanceof Error ? error : new Error('Unknown error'));
+        console.error('❌ API: Erro ao consultar analises de margem', error instanceof Error ? error : new Error('Unknown error'));
         res.status(500).json({
             success: false,
-            message: 'Erro ao consultar análises de margem',
+            message: 'Erro ao consultar analises de margem',
             error: error instanceof Error ? error.message : 'Erro desconhecido',
         });
     }
@@ -254,7 +254,7 @@ router.post('/simular', auth_1.authenticateToken, [
 ], validation_1.validateRequest, async (req, res) => {
     try {
         const { empresaId, produtos, cenarios } = req.body;
-        console.log('🧮 API: Simulando cenários de precificação', {
+        console.log('🧮 API: Simulando cenários de precificacao', {
             empresaId,
             produtos: produtos.length,
             cenarios: cenarios.length,
@@ -271,10 +271,10 @@ router.post('/simular', auth_1.authenticateToken, [
         });
     }
     catch (error) {
-        console.error('❌ API: Erro ao simular precificação', error instanceof Error ? error : new Error('Unknown error'));
+        console.error('❌ API: Erro ao simular precificacao', error instanceof Error ? error : new Error('Unknown error'));
         return res.status(500).json({
             success: false,
-            message: 'Erro ao simular precificação',
+            message: 'Erro ao simular precificacao',
             error: error instanceof Error ? error.message : 'Erro desconhecido',
         });
     }
@@ -296,7 +296,7 @@ router.get('/recomendacoes', auth_1.authenticateToken, [
             'Revisar preços dos produtos com margem abaixo de 15%',
             'Analisar oportunidades de redução de custos operacionais',
             'Considerar aumento de preço para produtos com alta competitividade',
-            'Implementar estratégia de precificação dinâmica',
+            'Implementar estratégia de precificacao dinâmica',
         ];
         res.status(200).json({
             success: true,
@@ -326,7 +326,7 @@ router.get('/relatorios/:periodo', auth_1.authenticateToken, [
     try {
         const { periodo } = req.params;
         const { empresaId, formato = 'pdf', tipo = 'completo' } = req.query;
-        console.log('📄 API: Gerando relatório de precificação', {
+        console.log('📄 API: Gerando relatório de precificacao', {
             empresaId,
             periodo,
             formato,
@@ -338,7 +338,7 @@ router.get('/relatorios/:periodo', auth_1.authenticateToken, [
             periodo,
             formato,
             tipo,
-            conteudo: 'Relatório de precificação gerado automaticamente pela IA',
+            conteudo: 'Relatório de precificacao gerado automaticamente pela IA',
             dataGeracao: new Date(),
             totais: {
                 produtosAnalisados: 0,
@@ -349,15 +349,15 @@ router.get('/relatorios/:periodo', auth_1.authenticateToken, [
         };
         res.status(200).json({
             success: true,
-            message: 'Relatório de precificação gerado com sucesso',
+            message: 'Relatório de precificacao gerado com sucesso',
             data: { relatorio },
         });
     }
     catch (error) {
-        console.error('❌ API: Erro ao gerar relatório de precificação', error instanceof Error ? error : new Error('Unknown error'));
+        console.error('❌ API: Erro ao gerar relatório de precificacao', error instanceof Error ? error : new Error('Unknown error'));
         res.status(500).json({
             success: false,
-            message: 'Erro ao gerar relatório de precificação',
+            message: 'Erro ao gerar relatório de precificacao',
             error: error instanceof Error ? error.message : 'Erro desconhecido',
         });
     }

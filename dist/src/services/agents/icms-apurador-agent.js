@@ -17,7 +17,7 @@ class ICMSApuradorAgent {
         const startTime = Date.now();
         const apuracaoId = `apuracao_${empresaId}_${periodo}_${Date.now()}`;
         try {
-            console.log('🚀 AGENTE 3: Iniciando apuração ICMS 100% autônoma', {
+            console.log('🚀 AGENTE 3: Iniciando apuracao ICMS 100% autonoma', {
                 empresaId,
                 periodo,
                 apuracaoId,
@@ -57,7 +57,7 @@ class ICMSApuradorAgent {
             return apuracao;
         }
         catch (error) {
-            console.error('❌ AGENTE 3: Erro na apuração ICMS', error instanceof Error ? error : new Error('Unknown error'));
+            console.error('❌ AGENTE 3: Erro na apuracao ICMS', error instanceof Error ? error : new Error('Unknown error'));
             return {
                 id: apuracaoId,
                 empresaId,
@@ -76,7 +76,7 @@ class ICMSApuradorAgent {
                     saldoApurado: 0,
                     porRegra: {},
                 },
-                observacoes: ['Erro na apuração automática'],
+                observacoes: ['Erro na apuracao automática'],
                 status: 'erro',
                 confianca: 0,
             };
@@ -131,7 +131,7 @@ class ICMSApuradorAgent {
       "confianca": 0-100
     }
     
-    Conteúdo para análise:
+    Conteúdo para analise:
     ${conteudo}
     `;
         try {
@@ -148,7 +148,7 @@ class ICMSApuradorAgent {
             return Array.isArray(regras) ? regras : [regras];
         }
         catch (error) {
-            console.error('❌ AGENTE 3: Erro na análise com IA', error instanceof Error ? error : new Error('Unknown error'));
+            console.error('❌ AGENTE 3: Erro na analise com IA', error instanceof Error ? error : new Error('Unknown error'));
             return [];
         }
     }
@@ -327,7 +327,7 @@ class ICMSApuradorAgent {
     async gerarObservacoesAutomaticamente(itens, totais) {
         const observacoes = [];
         const prompt = `
-    Analise os dados de apuração ICMS e gere observações técnicas relevantes.
+    Analise os dados de apuracao ICMS e gere observações técnicas relevantes.
     
     Dados:
     - Total de operações: ${(0, br_utils_1.formatarValorBR)(totais.valorTotalOperacoes)}

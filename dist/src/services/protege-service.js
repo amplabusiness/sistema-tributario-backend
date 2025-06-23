@@ -278,8 +278,8 @@ class ProtegeService {
             return novaConfig;
         }
         catch (error) {
-            (0, logger_1.logError)('Erro ao atualizar configuração PROTEGE:', error);
-            throw new Error(`Erro ao atualizar configuração: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            (0, logger_1.logError)('Erro ao atualizar configuracao PROTEGE:', error);
+            throw new Error(`Erro ao atualizar configuracao: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     }
 }

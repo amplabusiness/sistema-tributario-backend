@@ -240,7 +240,7 @@ class DocumentIndexer {
             };
         }
         catch (error) {
-            console.error('Erro na validação de dados fiscais', error instanceof Error ? error : new Error('Unknown error'));
+            console.error('Erro na validacao de dados fiscais', error instanceof Error ? error : new Error('Unknown error'));
             throw error;
         }
     }

@@ -33,7 +33,7 @@ class DocumentProcessor {
                 const hasErrors = validationResults.some(v => v.severity === 'error');
                 if (hasErrors) {
                     result.success = false;
-                    result.error = 'Documento contém erros de validação';
+                    result.error = 'Documento contém erros de validacao';
                 }
             }
             const finalStatus = result.success ? client_1.DocumentStatus.COMPLETED : client_1.DocumentStatus.ERROR;

@@ -5,6 +5,7 @@ import { EmpresaService } from '../empresa-service';
 import { DocumentProcessor } from '../document-processor';
 import { CacheService } from '../cache';
 import BatchProcessor from '../batch-processor';
+import { ParsedDocument, CompanyData } from '../parsers/document-parser';
 
 export interface DocumentParsingResult {
   success: boolean;
@@ -61,21 +62,31 @@ export class DocumentParsingAgent {
       const { fileName, fileType, content, empresaId } = req.body;
 
       if (!fileName || !fileType || !content) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           error: 'Dados obrigatorios: fileName, fileType, content'
         });
+        return;
       }
 
       console.log(`📄 Processando documento: ${fileName} (${fileType})`);
 
-      // Parser automatico baseado no tipo
-      const parsedData = await this.documentParser.parse(fileType, content);
-      
-      // Indexacao automatica no banco
-      const indexedData = await this.documentIndexer.index(parsedData, empresaId);
+      // Salvar o conteúdo em um arquivo temporário
+      const tempPath = `/tmp/${fileName}`;
+      require('fs').writeFileSync(tempPath, content);
 
-      console.log(`✅ Documento processado: ${fileName} - ${indexedData.totalRegistros} registros`);
+      // Parser automático baseado no tipo
+      const parsedData = await this.documentParser.parseDocument(tempPath);
+      
+      // Indexação automática no banco
+      await this.documentIndexer.indexarDocumento({
+        userId: empresaId || '',
+        tipo: fileType,
+        conteudo: parsedData,
+        empresaId: empresaId || ''
+      });
+
+      console.log(`✅ Documento processado: ${fileName}`);
 
       res.json({
         success: true,
@@ -84,9 +95,6 @@ export class DocumentParsingAgent {
           fileName,
           fileType,
           empresaId,
-          totalRegistros: indexedData.totalRegistros,
-          registrosProcessados: indexedData.registrosProcessados,
-          erros: indexedData.erros,
           processadoEm: new Date().toISOString()
         }
       });
@@ -184,71 +192,68 @@ export class DocumentParsingAgent {
       // 1. Fazer parsing do documento
       const parsedDocument = await this.documentParser.parseDocument(filePath);
       result.documentId = parsedDocument.id;
-      result.extractedData = parsedDocument;      // 2. Extrair e validar dados da empresa
+      result.extractedData = parsedDocument;
+
+      // 2. Extrair e validar dados da empresa
       const companyData = parsedDocument.companyData;
       if (companyData.cnpj) {
         // Verificar se empresa já existe
-        let empresa = await EmpresaService.findByCnpj(companyData.cnpj);
+        let empresa = await EmpresaService.getEmpresaByCnpj(companyData.cnpj);
         
         if (!empresa) {
-          // Cadastrar empresa automaticamente
-          console.log(`Empresa não encontrada, cadastrando automaticamente: ${companyData.cnpj}`);
-            empresa = await EmpresaService.createEmpresa({
+          // Registrar empresa automaticamente
+          console.log(`🏢 Registrando nova empresa: ${companyData.cnpj}`);
+          
+          const empresaData = {
             cnpj: companyData.cnpj,
             razaoSocial: companyData.razaoSocial || 'Empresa não identificada',
             nomeFantasia: companyData.nomeFantasia,
             ie: companyData.ie,
             im: companyData.im,
-            cnae: companyData.cnae,            endereco: companyData.endereco ? JSON.stringify(companyData.endereco) : undefined,
-            regimeTributario: companyData.regimeTributario,
-          });
-          
-          if (empresa) {
-            result.autoRegisteredCompany = true;
-            console.log(`Empresa cadastrada automaticamente: ${empresa.id}`);
-          }
+            cnae: companyData.cnae,
+            endereco: companyData.endereco ? 
+              `${companyData.endereco.logradouro}, ${companyData.endereco.numero} - ${companyData.endereco.bairro}, ${companyData.endereco.municipio}/${companyData.endereco.uf}` : 
+              undefined,
+            regimeTributario: companyData.regimeTributario
+          };
+
+          empresa = await EmpresaService.createOrUpdateEmpresa(empresaData);
+          result.autoRegisteredCompany = true;
         }
-        
-        if (empresa) {
-          result.companyId = empresa.id;
-        }
+
+        result.companyId = empresa.id;
       }
 
-      // 3. Processar dados fiscais
-      if (parsedDocument.fiscalData) {
-        await this.processFiscalData(parsedDocument, result.companyId);
-      }
-
-      // 4. Validar dados extraídos
+      // 3. Validar dados extraídos
       const validationErrors = this.validateExtractedData(parsedDocument);
       result.validationErrors = validationErrors;
 
-      // 5. Indexar documento no banco
-      await this.indexDocument(parsedDocument, result.companyId);
+      // 4. Aplicar correções automáticas
+      const correctedDocument = await this.applyAutoCorrections(parsedDocument);
+      result.extractedData = correctedDocument;
 
-      // 6. Cache dos resultados
-      await this.cacheService.set(
-        `document:${result.documentId}`,
-        parsedDocument,
-        3600 // 1 hora
-      );
+      // 5. Indexar documento
+      await this.indexDocument(correctedDocument, result.companyId);
 
-      result.success = validationErrors.length === 0;
+      // 6. Processar dados fiscais
+      await this.processFiscalData(correctedDocument, result.companyId);
+
+      result.success = true;
       result.processingTime = Date.now() - startTime;
 
-      console.log(`Agente 2 concluído com sucesso: ${filePath}`, {
+      console.log(`✅ Agente 2 concluído: ${filePath}`, {
         documentId: result.documentId,
         companyId: result.companyId,
-        autoRegistered: result.autoRegisteredCompany,
         validationErrors: result.validationErrors.length,
         processingTime: result.processingTime
       });
 
-      return result;    } catch (error) {
+      return result;
+
+    } catch (error) {
+      console.error(`❌ Erro no Agente 2: ${filePath}`, error);
+      result.validationErrors.push(`Erro de processamento: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
       result.processingTime = Date.now() - startTime;
-      result.validationErrors.push(`Erro no processamento: ${(error as Error).message || 'Erro desconhecido'}`);
-      
-      console.error(`Erro no Agente 2: ${filePath}`, { error, result });
       return result;
     }
   }

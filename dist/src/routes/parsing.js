@@ -263,7 +263,7 @@ router.get('/sped-fiscal/apuracoes', auth_1.authenticateToken, [
     }
 });
 router.post('/validate', auth_1.authenticateToken, [
-    (0, express_validator_1.body)('dados').isObject().withMessage('Dados para validação são obrigatórios'),
+    (0, express_validator_1.body)('dados').isObject().withMessage('Dados para validacao são obrigatórios'),
 ], validation_2.validateRequest, async (req, res) => {
     try {
         const { dados } = req.body;
@@ -279,7 +279,7 @@ router.post('/validate', auth_1.authenticateToken, [
         });
     }
     catch (error) {
-        console.error('Erro na validação de dados fiscais', error instanceof Error ? error : new Error('Unknown error'));
+        console.error('Erro na validacao de dados fiscais', error instanceof Error ? error : new Error('Unknown error'));
         res.status(constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
             success: false,
             error: constants_1.MESSAGES.ERROR.INTERNAL_ERROR,

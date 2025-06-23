@@ -17,7 +17,7 @@ const validateApuracao = [
 router.post('/apuracao', auth_1.authenticateToken, (0, validation_1.validate)(validateApuracao), async (req, res) => {
     try {
         const { empresa, cnpj, periodo, documentos, planilhas = [], relatorios = [] } = req.body;
-        console.log('Iniciando apuração ICMS', {
+        console.log('Iniciando apuracao ICMS', {
             empresa,
             cnpj,
             periodo,
@@ -54,14 +54,14 @@ router.post('/apuracao', auth_1.authenticateToken, (0, validation_1.validate)(va
         });
     }
     catch (error) {
-        console.error('Erro ao processar apuração ICMS', {
+        console.error('Erro ao processar apuracao ICMS', {
             error: error instanceof Error ? error.message : 'Unknown error',
             userId: req.user?.id,
             body: req.body,
         });
         return res.status(500).json({
             success: false,
-            message: 'Erro interno do servidor ao processar apuração ICMS',
+            message: 'Erro interno do servidor ao processar apuracao ICMS',
             error: error instanceof Error ? error.message : 'Unknown error',
         });
     }
@@ -69,7 +69,7 @@ router.post('/apuracao', auth_1.authenticateToken, (0, validation_1.validate)(va
 router.get('/apuracao/:id', auth_1.authenticateToken, async (req, res) => {
     try {
         const { id } = req.params;
-        console.log('Buscando apuração ICMS', {
+        console.log('Buscando apuracao ICMS', {
             apuracaoId: id,
             userId: req.user?.id,
         });
@@ -87,14 +87,14 @@ router.get('/apuracao/:id', auth_1.authenticateToken, async (req, res) => {
         });
     }
     catch (error) {
-        console.error('Erro ao buscar apuração ICMS', {
+        console.error('Erro ao buscar apuracao ICMS', {
             error: error instanceof Error ? error.message : 'Unknown error',
             apuracaoId: req.params.id,
             userId: req.user?.id,
         });
         return res.status(500).json({
             success: false,
-            message: 'Erro interno do servidor ao buscar apuração ICMS',
+            message: 'Erro interno do servidor ao buscar apuracao ICMS',
             error: error instanceof Error ? error.message : 'Unknown error',
         });
     }
@@ -236,7 +236,7 @@ router.post('/start', auth_1.authenticateToken, async (req, res) => {
         await icms_apuracao_agent_1.icmsApuracaoAgent.start();
         return res.status(200).json({
             success: true,
-            message: 'Agente de apuração ICMS iniciado com sucesso',
+            message: 'Agente de apuracao ICMS iniciado com sucesso',
         });
     }
     catch (error) {
@@ -256,7 +256,7 @@ router.post('/stop', auth_1.authenticateToken, async (req, res) => {
         await icms_apuracao_agent_1.icmsApuracaoAgent.stop();
         return res.status(200).json({
             success: true,
-            message: 'Agente de apuração ICMS parado com sucesso',
+            message: 'Agente de apuracao ICMS parado com sucesso',
         });
     }
     catch (error) {

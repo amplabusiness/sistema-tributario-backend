@@ -19,7 +19,7 @@ class ICMSApuracaoAgent {
     }
     async start() {
         if (this.isRunning) {
-            console.log('Agente de apuração ICMS já está em execução');
+            console.log('Agente de apuracao ICMS já está em execução');
             return;
         }
         this.isRunning = true;
@@ -67,7 +67,7 @@ class ICMSApuracaoAgent {
             observacoes: '',
         };
         try {
-            console.log('Iniciando apuração de ICMS', {
+            console.log('Iniciando apuracao de ICMS', {
                 apuracaoId,
                 empresa,
                 periodo,
@@ -104,7 +104,7 @@ class ICMSApuracaoAgent {
             return apuracao;
         }
         catch (error) {
-            console.error('Erro ao processar apuração ICMS', {
+            console.error('Erro ao processar apuracao ICMS', {
                 apuracaoId,
                 empresa,
                 periodo,
@@ -152,7 +152,7 @@ class ICMSApuracaoAgent {
             const conteudo = await this.lerArquivo(planilhaPath);
             const analiseIA = await (0, openai_service_1.analisarXML)(conteudo, 'SPED');
             if (!analiseIA.success) {
-                throw new Error('Falha na análise IA da planilha');
+                throw new Error('Falha na analise IA da planilha');
             }
             const regras = this.parsearRegrasPlanilha(conteudo, analiseIA.content);
             return regras;
@@ -170,7 +170,7 @@ class ICMSApuracaoAgent {
             const conteudo = await this.lerArquivo(relatorioPath);
             const analiseIA = await (0, openai_service_1.analisarXML)(conteudo, 'SPED');
             if (!analiseIA.success) {
-                throw new Error('Falha na análise IA do relatório');
+                throw new Error('Falha na analise IA do relatório');
             }
             const regras = this.parsearRegrasRelatorio(conteudo, analiseIA.content);
             return regras;
@@ -377,7 +377,7 @@ class ICMSApuracaoAgent {
     }
     async gerarRelatorioTecnico(resultado, totais) {
         const relatorio = `
-# RELATÓRIO TÉCNICO - APURAÇÃO ICMS
+# RELATÓRIO TÉCNICO - APURACAO ICMS
 
 ## RESUMO EXECUTIVO
 - **Base de Cálculo Total**: ${(0, br_utils_1.formatarValorBR)(totais.baseCalculo)}
@@ -556,7 +556,7 @@ ${resultado.operacoes.map((o) => `
         return [];
     }
     async salvarNoBanco(apuracao) {
-        console.log('Salvando apuração ICMS no banco', {
+        console.log('Salvando apuracao ICMS no banco', {
             apuracaoId: apuracao.id,
             empresa: apuracao.empresa,
             status: apuracao.status,

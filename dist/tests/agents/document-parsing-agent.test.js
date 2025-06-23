@@ -36,7 +36,7 @@ describe('DocumentParsingAgent', () => {
         batch_processor_1.BatchProcessor.mockImplementation(() => mockBatchProcessor);
         document_processor_1.DocumentProcessor.getDocumentsByCompany = mockDocumentProcessor.getDocumentsByCompany;
         document_processor_1.DocumentProcessor.getAllDocuments = mockDocumentProcessor.getAllDocuments;
-        agent = new document_parsing_agent_1.DocumentParsingAgent();
+        agent = document_parsing_agent_1.DocumentParsingAgent.getInstance();
     });
     describe('processDocument', () => {
         it('deve processar um documento SPED Fiscal com sucesso', async () => {

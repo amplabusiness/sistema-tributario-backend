@@ -313,9 +313,9 @@ router.put('/configuracao/:empresaId', async (req, res) => {
         });
     }
     catch (error) {
-        (0, logger_1.logError)('Erro ao atualizar configuração do PROTEGE:', error);
+        (0, logger_1.logError)('Erro ao atualizar configuracao do PROTEGE:', error);
         return res.status(500).json({
-            error: 'Erro ao atualizar configuração do PROTEGE',
+            error: 'Erro ao atualizar configuracao do PROTEGE',
             details: error instanceof Error ? error.message : 'Unknown error'
         });
     }

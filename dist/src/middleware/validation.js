@@ -11,7 +11,7 @@ const formatValidationErrors = (errors) => {
     return {
         success: false,
         error: constants_1.MESSAGES.ERROR.VALIDATION_ERROR,
-        message: 'Erro de validação nos dados fornecidos',
+        message: 'Erro de validacao nos dados fornecidos',
         details: errorMessages.map(e => `${e.field}: ${e.message}`),
         code: constants_1.HTTP_STATUS.UNPROCESSABLE_ENTITY
     };
@@ -38,7 +38,7 @@ const validate = (validations) => {
             res.status(constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
                 success: false,
                 error: constants_1.MESSAGES.ERROR.INTERNAL_ERROR,
-                message: 'Erro interno durante validação',
+                message: 'Erro interno durante validacao',
                 code: constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR
             });
         }
@@ -65,7 +65,7 @@ const validateRequest = (req, res, next) => {
         res.status(constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
             success: false,
             error: constants_1.MESSAGES.ERROR.INTERNAL_ERROR,
-            message: 'Erro interno durante validação',
+            message: 'Erro interno durante validacao',
             code: constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR
         });
     }

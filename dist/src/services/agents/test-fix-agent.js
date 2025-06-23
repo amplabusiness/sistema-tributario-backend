@@ -13,7 +13,7 @@ class TestFixAgent {
         this.cache = new cache_1.CacheService();
     }
     async fixTestIssues() {
-        logger_1.logger.info('🔧 Agente de Correção de Testes iniciando análise...');
+        logger_1.logger.info('🔧 Agente de Correção de Testes iniciando analise...');
         try {
             const testErrors = await this.analyzeTestErrors();
             const fixes = await this.generateFixes(testErrors);
@@ -50,7 +50,7 @@ class TestFixAgent {
                 errorType: 'MockError',
                 errorMessage: 'Cannot read properties of undefined (reading \'mockResolvedValue\')',
                 lineNumber: 100,
-                suggestion: 'Mocks de serviços não configurados'
+                suggestion: 'Mocks de servicos não configurados'
             },
             {
                 testFile: 'tests/routes/auth.test.ts',
@@ -264,7 +264,7 @@ export { mockPrisma, mockLogger, mockRedis };
         }
     }
     async fixJestConfig() {
-        logger_1.logger.info('⚙️ Corrigindo configuração Jest...');
+        logger_1.logger.info('⚙️ Corrigindo configuracao Jest...');
         const jestConfigFix = {
             file: 'jest.config.js',
             content: `
@@ -306,7 +306,7 @@ module.exports = {
 };
       `
         };
-        logger_1.logger.info('Aplicando correção de configuração Jest');
+        logger_1.logger.info('Aplicando correção de configuracao Jest');
     }
     async startContinuousFix() {
         logger_1.logger.info('🔄 Iniciando correção contínua de testes...');

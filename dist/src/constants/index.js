@@ -25,7 +25,7 @@ exports.MESSAGES = {
         CACHE_CLEARED: 'Cache limpo com sucesso',
     },
     ERROR: {
-        VALIDATION_ERROR: 'Erro de validação',
+        VALIDATION_ERROR: 'Erro de validacao',
         UNAUTHORIZED: 'Não autorizado',
         FORBIDDEN: 'Acesso negado',
         NOT_FOUND: 'Recurso não encontrado',
