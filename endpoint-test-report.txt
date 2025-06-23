@@ -1,0 +1,76 @@
+
+🤖 RELATÓRIO DE TESTES AUTOMATIZADOS - SISTEMA TRIBUTÁRIO 100% IA
+================================================================
+
+📅 Data: 22/06/2025, 23:22:31
+🌐 URL Base: https://backend-sergio-2143-sergio-carneiro-leaos-projects.vercel.app
+
+📊 RESUMO:
+- Total de Testes: 11
+- Testes Passados: 11
+- Testes Falharam: 0
+- Taxa de Sucesso: 100.00%
+- Tempo Total: 1958ms
+- Tempo Médio de Resposta: 177.36ms
+
+
+✅ Health Check
+   Status: 200
+   Tempo: 192ms
+   
+
+✅ API Status
+   Status: 200
+   Tempo: 180ms
+   
+
+✅ Root Endpoint
+   Status: 200
+   Tempo: 156ms
+   
+
+✅ List Documents
+   Status: 200
+   Tempo: 176ms
+   
+
+✅ Upload File (Valid)
+   Status: 200
+   Tempo: 170ms
+   
+
+✅ Upload File (Invalid - Missing Fields)
+   Status: 400
+   Tempo: 166ms
+   
+
+✅ ICMS Analysis (Valid)
+   Status: 200
+   Tempo: 167ms
+   
+
+✅ ICMS Analysis (Default Values)
+   Status: 200
+   Tempo: 195ms
+   
+
+✅ Federal Analysis (Valid)
+   Status: 200
+   Tempo: 190ms
+   
+
+✅ Federal Analysis (Default Values)
+   Status: 200
+   Tempo: 190ms
+   
+
+✅ 404 Not Found
+   Status: 404
+   Tempo: 169ms
+   
+
+
+🔗 Links Úteis:
+- API: https://backend-sergio-2143-sergio-carneiro-leaos-projects.vercel.app
+- Health Check: https://backend-sergio-2143-sergio-carneiro-leaos-projects.vercel.app/health
+- Status: https://backend-sergio-2143-sergio-carneiro-leaos-projects.vercel.app/api/status
